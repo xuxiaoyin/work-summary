@@ -1,0 +1,6 @@
+----------------关于Element-ui----------------
+1.resetfields() 不生效
+    想让resetfields()生效有2个前提：
+    form要设置ref，且ref值要与 this.$refs[formName].resetFields()中的foemName一致
+    el-form-item上设置prop字段，表单rule验证和resetfields() 清理的都是prop绑定的字段
+
