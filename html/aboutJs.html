@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
+
 <body>
     <div>Js开发技巧</div>
 </body>
@@ -15,12 +17,12 @@
     1.数组交集 
     普通数组
     */
-   function fn1() {
+    function fn1() {
         const arr1 = [1, 3, 5, 7, 9], arr2 = [1, 2, 3, 4, 5, 6]
         const intersection = arr1.filter(val => arr2.indexOf(val) > -1)
         console.log(intersection)
-   }
-    
+    }
+
     // 数组对象
     function fn2() {
         const arr1 = [{ name: 'name1', id: 1 }, { name: 'name2', id: 2 }, { name: 'name3', id: 3 }, { name: 'name5', id: 5 }]
@@ -113,8 +115,8 @@
     // 普通数组
     function fn11() {
         const arr1 = [1, 3, 2, 5, 4]
-        const result1 = arr1.sort((a, b) => a-b) // 升序
-        const result2 = arr1.sort((a, b) => b-a) // 降序
+        const result1 = arr1.sort((a, b) => a - b) // 升序
+        const result2 = arr1.sort((a, b) => b - a) // 降序
         console.log(result1)
         console.log(result2)
     }
@@ -171,7 +173,7 @@
         const arr1 = [1, 2, 3, 4]
         console.log(arr1.includes(1))
         console.log(arr1.indexOf(5) > -1)
-        console.log(arr1.find(item => item === 3 ))  // 3，没有则返回undefined
+        console.log(arr1.find(item => item === 3))  // 3，没有则返回undefined
         console.log(arr1.findIndex(item => item === 3))
     }
 
@@ -182,25 +184,362 @@
         console.log(result)
     }
 
-    // fn1()
-    // fn2()
-    // fn3()
-    // fn4()
-    // fn5()
-    // fn6()
-    // fn7()
-    // fn8()
-    // fn9()
-    // fn10()
-    // fn11()
-    // fn12()
-    // fn13()
-    // fn14()
-    // fn15()
-    // fn16()
-    // fn17()
-    // fn18()
-    fn19()
-    
+    // 11.对象转数组
+    Object.keys({ name: '张三', age: 14 }) //['name','age']
+    Object.values({ name: '张三', age: 14 }) //['张三',14]
+    Object.entries({ name: '张三', age: 14 }) //[[name,'张三'],[age,14]]
+
+    // 12.数组转对象
+    function fn20() {
+        const arr1 = ['张三', '李四', '王五']
+        const arrAge = ['20', '30', '40']
+        const arrDec = ['描述1', '描述2', '描述3']
+        const result = arr1.map((item, index) => {
+            return { name: item, age: arrAge[index], dec: arrDec[index] }
+        })
+        console.log(result)
+    }
+
+    /* ////////////////////////////////////////
+    Object
+    1.对象变量属性
+    */
+
+    function fobj1() {
+        const falg = true
+        const obj = {
+            a: 1,
+            [falg ? 'c' : 'b']: 2
+        }
+        console.log(obj)
+    }
+
+    // 2.对象多余属性删除
+    function fobj2() {
+        const { name, age, ...obj } = { name: '张三', age: 13, dec: '描述1', info: '信息' }
+        console.log(name)  // 张三
+        console.log(age)  // 13
+        console.log(obj)  // {dec: '描述1', info: '信息' }
+    }
+
+    // 3.对象嵌套属性解构
+    function fobj3() {
+        const { info: { dec } } = { name: '测试', info: { dec: '描述', other: '乱七八糟' } }
+        console.log(dec)
+    }
+
+    // 4.解构对象属性别名
+    function fobj4() {
+        const { name: newName } = { name: '张三', age: '40' }
+        console.log(newName)
+    }
+
+    // 5.解构对象默认属性
+    function fobj5() {
+        const { dec = '这是默认属性' } = { name: '张三', age: '40' }
+        console.log(dec)
+    }
+
+    // 6.对象深拷贝
+    function fobj6() {
+        const objDeepClone = obj => {
+            return clone(obj)
+        }
+
+        const isType = (obj, type) => {
+            if (typeof obj !== 'object') return false;
+            // 判断数据类型的经典方法：
+            const typeString = Object.prototype.toString.call(obj);
+            let flag;
+            switch (type) {
+                case 'Array':
+                    flag = typeString === '[object Array]';
+                    break;
+                case 'Date':
+                    flag = typeString === '[object Date]';
+                    break;
+                case 'RegExp':
+                    flag = typeString === '[object RegExp]';
+                    break;
+                default:
+                    flag = false;
+            }
+            return flag;
+        };
+
+        /**
+        * deep clone
+        * @param  {[type]} parent object 需要进行克隆的对象
+        * @return {[type]}        深克隆后的对象
+        */
+        const clone = parent => {
+            // 维护两个储存循环引用的数组
+            const parents = []
+            const children = []
+
+            const _clone = parent => {
+                if (parent === null) return null
+                if (typeof parent !== 'object') return parent
+
+                let child, proto
+
+                if (isType(parent, 'Array')) {
+                    // 对数组做特殊处理
+                    child = []
+                } else if (isType(parent, 'RegExp')) {
+                    // 对正则对象做特殊处理
+                    child = new RegExp(parent.source, getRegExp(parent))
+                    if (parent.lastIndex) child.lastIndex = parent.lastIndex
+                } else if (isType(parent, 'Date')) {
+                    // 对Date对象做特殊处理
+                    child = new Date(parent.getTime())
+                } else {
+                    // 处理对象原型
+                    proto = Object.getPrototypeOf(parent)
+                    // 利用Object.create切断原型链
+                    child = Object.create(proto)
+                }
+
+                // 处理循环引用
+                const index = parents.indexOf(parent)
+
+                if (index !== -1) {
+                    // 如果父数组存在本对象,说明之前已经被引用过,直接返回此对象
+                    return children[index]
+                }
+                parents.push(parent)
+                children.push(child)
+
+                for (const i in parent) {
+                    // 递归
+                    child[i] = _clone(parent[i])
+                }
+
+                return child
+            }
+            return _clone(parent)
+        }
+
+        const arr1 = { name: '张三', age: 23, obj: { name: '李四', age: 46 }, arr: [1, 2, 3] }
+        const result = objDeepClone(arr1)
+        console.log(result)
+        result.obj.name = '王五'
+        result.arr.push(4)
+        console.log(result)
+        console.log(arr1)
+    }
+
+    // 7.对象是否相等
+    function fobj7() {
+
+        function deepCompare(x, y) {
+            var i, l, leftChain, rightChain;
+
+            function compare2Objects(x, y) {
+                var p;
+
+                // remember that NaN === NaN returns false
+                // and isNaN(undefined) returns true
+                if (isNaN(x) && isNaN(y) && typeof x === 'number' && typeof y === 'number') {
+                    return true;
+                }
+
+                // Compare primitives and functions.     
+                // Check if both arguments link to the same object.
+                // Especially useful on the step where we compare prototypes
+                if (x === y) {
+                    return true;
+                }
+
+                // Works in case when functions are created in constructor.
+                // Comparing dates is a common scenario. Another built-ins?
+                // We can even handle functions passed across iframes
+                if ((typeof x === 'function' && typeof y === 'function') ||
+                    (x instanceof Date && y instanceof Date) ||
+                    (x instanceof RegExp && y instanceof RegExp) ||
+                    (x instanceof String && y instanceof String) ||
+                    (x instanceof Number && y instanceof Number)) {
+                    return x.toString() === y.toString();
+                }
+
+                // At last checking prototypes as good as we can
+                if (!(x instanceof Object && y instanceof Object)) {
+                    return false;
+                }
+
+                if (x.isPrototypeOf(y) || y.isPrototypeOf(x)) {
+                    return false;
+                }
+
+                if (x.constructor !== y.constructor) {
+                    return false;
+                }
+
+                if (x.prototype !== y.prototype) {
+                    return false;
+                }
+
+                // Check for infinitive linking loops
+                if (leftChain.indexOf(x) > -1 || rightChain.indexOf(y) > -1) {
+                    return false;
+                }
+
+                // Quick checking of one object being a subset of another.
+                // todo: cache the structure of arguments[0] for performance
+                for (p in y) {
+                    if (y.hasOwnProperty(p) !== x.hasOwnProperty(p)) {
+                        return false;
+                    } else if (typeof y[p] !== typeof x[p]) {
+                        return false;
+                    }
+                }
+
+                for (p in x) {
+                    if (y.hasOwnProperty(p) !== x.hasOwnProperty(p)) {
+                        return false;
+                    } else if (typeof y[p] !== typeof x[p]) {
+                        return false;
+                    }
+
+                    switch (typeof (x[p])) {
+                        case 'object':
+                        case 'function':
+
+                            leftChain.push(x);
+                            rightChain.push(y);
+
+                            if (!compare2Objects(x[p], y[p])) {
+                                return false;
+                            }
+
+                            leftChain.pop();
+                            rightChain.pop();
+                            break;
+
+                        default:
+                            if (x[p] !== y[p]) {
+                                return false;
+                            }
+                            break;
+                    }
+                }
+
+                return true;
+            }
+
+            if (arguments.length < 1) {
+                return true;
+            }
+
+            for (i = 1, l = arguments.length; i < l; i++) {
+
+                leftChain = []; //Todo: this can be cached
+                rightChain = [];
+
+                if (!compare2Objects(arguments[0], arguments[i])) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        const obj1 = {
+            name: '张三', age: 21,
+            obj: { name: '李四', age: 46 },
+            arr: [1, 2, 3],
+            date: new Date(23),
+            reg: new RegExp('abc'),
+            fun: () => { }
+        }
+        const obj2 = {
+            name: '张三', age: 21,
+            obj: { name: '李四', age: 46 },
+            arr: [1, 2, 3],
+            date: new Date(23),
+            reg: new RegExp('abc'),
+            fun: () => { }
+        }
+
+        console.log(deepCompare(obj1, obj2)) // true
+    }
+
+     /* ////////////////////////////////////////
+    Function
+    函数异步执行
+    1. Promise
+    */
+
+    function fnc1() {
+        Promise.reject('这是第二个 reject 值').then(data => {
+            console.log(data)
+        }).catch(err => {
+            console.log('err' + err)
+        })
+    }
+
+    // 2.Generator
+    function fnc2() {
+        function* gen(x) {
+            const y = yield x + 6
+            return y
+        }
+        const g = gen(1)
+        console.log(g.next())
+        console.log(g.next())
+    }
+
+    // 3.Async/Await
+    function fnc3() {
+        function getSomething() {
+            return 'get some thing'
+        }
+
+        async function textAsync() {
+            return Promise.resolve("hello async")
+        }
+
+        async function test() {
+            const a = await getSomething()
+            const b = await textAsync()
+            console.log(a, b)
+        }
+        test()
+    }
+
+    /* ////////////////////////////////////////
+    String 
+    1.字符串翻转
+    */
+
+    function fstr1() {
+        function reverseStr(str='') {
+            return str.split('').reduceRight((t, v) => t + v)
+        }
+        const str = '123reduce'
+        console.log(reverseStr(str)) // ecuder321
+    }
+
+    // 2.url参数序列化
+    function fstr2() {
+        function stringifyUrl( search = {} ) {
+            return Object.entries(search).reduce((t, v) =>
+                // console.log(t)
+                // console.log(`${t}${v[0]}=${encodeURIComponent(v[1])}&`)
+              `${t}${v[0]}=${encodeURIComponent(v[1])}&`,
+                Object.keys(search).length ? "?" : ""
+            ).replace(/&$/, "")
+        }
+        const result = stringifyUrl({ name: '张三', id: '1' })
+        console.log(decodeURIComponent(result))
+    }
+
+    // fn1();    fn2();  fn3();    fn4();  fn5();    fn6();   fn7();   fn8();   fn9();   fn10();  fn11();  fn12();  fn13();  fn14();  fn15();  fn16();  fn17();  fn18();  fn19();  fn20();
+    // fobj1();     fobj2();    fobj3();    fobj4();    fobj5();    fobj6();    fobj7()
+    // fnc1();     fnc2();     fnc3()
+    fstr1()
+    fstr2()
+
 </script>
+
 </html>
