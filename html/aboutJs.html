@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>Js开发技巧</div>
+</body>
+<script>
+    /* ////////////////////////////////////////
+    Array
+    1.数组交集 
+    普通数组
+    */
+   function fn1() {
+        const arr1 = [1, 3, 5, 7, 9], arr2 = [1, 2, 3, 4, 5, 6]
+        const intersection = arr1.filter(val => arr2.indexOf(val) > -1)
+        console.log(intersection)
+   }
+    
+    // 数组对象
+    function fn2() {
+        const arr1 = [{ name: 'name1', id: 1 }, { name: 'name2', id: 2 }, { name: 'name3', id: 3 }, { name: 'name5', id: 5 }]
+        const arr2 = [{ name: 'name1', id: 1 }, { name: 'name2', id: 2 }, { name: 'name3', id: 3 }, { name: 'name4', id: 4 }, { name: 'name5', id: 5 }]
+        const result = arr2.filter(item => {
+            return arr1.some(item1 => JSON.stringify(item1) === JSON.stringify(item))
+        })
+        console.log(result)
+    }
+
+    // 2.数组并集
+    // 普通数组
+    function fn3() {
+        const arr1 = [1, 3, 5, 7, 9], arr2 = [1, 2, 3, 4, 5, 6]
+        const result = arr1.concat(arr2.filter(v => !arr1.includes(v)))
+        console.log(result)
+    }
+
+    // 对象数组
+    function fn4() {
+        const arr1 = [{ name: 'name1', id: 'a' }, { name: 'name2', id: 2 }, { name: 'name3', id: 3 }, { name: 'name5', id: 5 }, { name: 'name6', id: 6 }]
+        const arr2 = [{ name: 'name1', id: 'a' }, { name: 'name2', id: 2 }, { name: 'name3', id: 3 }, { name: 'name4', id: 4 }, { name: 'name5', id: 5 }]
+        let arr3 = arr1.concat(arr2)
+        let result = []
+        let obj = []
+        result = arr3.reduce(function (prev, cur, index, arr) {
+            obj[cur.id] ? '' : obj[cur.id] = true && prev.push(cur)
+            return prev
+        }, [])
+        console.log(result)
+    }
+
+    // 3.数组差集
+    // 普通数组
+    function fn5() {
+        const arr1 = [1, 3, 5, 7, 9], arr2 = [1, 2, 3, 4, 5, 6]
+        const result = arr2.filter(item => !new Set(arr1).has(item))
+        console.log(result)
+    }
+
+    // 对象数组
+    function fn6() {
+        const arr1 = [{ name: 'name1', id: 'a' }, { name: 'name2', id: 2 }, { name: 'name3', id: 3 }, { name: 'name5', id: 5 }, { name: 'name6', id: 6 }]
+        const arr2 = [{ name: 'nameb', id: 'b' }, { name: 'name2', id: 2 }, { name: 'name3', id: 3 }, { name: 'name4', id: 4 }, { name: 'name5', id: 5 }]
+        const result = arr1.filter(item1 => {
+            return arr2.every(item2 => JSON.stringify(item2) !== JSON.stringify(item1))
+        })
+        console.log(result)
+    }
+
+    // 4.数组补集 两个数组各自没有的集合
+    // 普通数组
+    function fn7() {
+        const arr1 = [1, 3, 5, 7, 9], arr2 = [1, 2, 3, 4, 5, 6]
+        const result = Array.from(new Set(arr1.concat(arr2).filter(v => !new Set(arr1).has(v) || !new Set(arr2).has(v))))
+        console.log(result)
+    }
+
+    // 对象数组
+    function fn8() {
+        const arr1 = [{ name: 'name1', id: 'a' }, { name: 'name2', id: 2 }, { name: 'name3', id: 3 }, { name: 'name5', id: 5 }, { name: 'name6', id: 6 }]
+        const arr2 = [{ name: 'nameb', id: 'b' }, { name: 'name2', id: 2 }, { name: 'name3', id: 3 }, { name: 'name4', id: 4 }, { name: 'name5', id: 5 }]
+        const arr3 = arr1.concat(arr2)
+        const result = arr3.filter(item => {
+            return arr1.every(item1 => JSON.stringify(item1) !== JSON.stringify(item) || arr2.every(item2 => JSON.stringify(item2) !== JSON.stringify(item)))
+        })
+        console.log(result)
+    }
+
+    // 5.数组去重
+    // 普通数组
+    function fn9() {
+        const arr1 = [1, 1, 4, 5, 6, 6]
+        const result = Array.from(new Set(arr1))
+        console.log(result)
+        console.log([...new Set(arr1)])
+    }
+
+    // 对象数组
+    function fn10() {
+        const arr1 = [{ name: 'name1', id: 'a' }, { name: 'name2', id: 2 }, { name: 'name3', id: 3 }, { name: 'name3', id: 3 }, { name: 'name5', id: 5 }, { name: 'name5', id: 5 }, { name: 'name6', id: 6 }]
+        let result = []
+        arr1.forEach(item => {
+            !result.some(item1 => JSON.stringify(item1) === JSON.stringify(item)) && result.push(item)
+        })
+        console.log(result)
+    }
+
+    // 6.数组排序
+    // 普通数组
+    function fn11() {
+        const arr1 = [1, 3, 2, 5, 4]
+        const result1 = arr1.sort((a, b) => a-b) // 升序
+        const result2 = arr1.sort((a, b) => b-a) // 降序
+        console.log(result1)
+        console.log(result2)
+    }
+
+    // 对象数组
+    function fn12() {
+        const arr1 = [{ name: '张三', age: '22' }, { name: '李四', age: '12' }]
+        const result = arr1.sort((a, b) => a.age - b.age)
+        console.log(result)
+    }
+
+    // 7.最大值
+    // 普通数组
+    function fn13() {
+        const arr1 = [1, 2, 3, 4]
+        console.log(Math.max(...arr1))
+        console.log(Math.max.apply(this, arr1))
+    }
+
+    // 对象数组
+    function fn14() {
+        const arr1 = [{ name: '张三', age: 22 }, { name: '李四', age: 12 }]
+        const result = Math.max.apply(Math, arr1.map(item => item.age))
+        const result1 = arr1.sort((a, b) => b.age - a.age)[0].age
+        console.log(result)
+        console.log(result1)
+    }
+
+    // 8.数组求和
+    // 普通数组
+    function fn15() {
+        const arr1 = [1, 2, 3, 4]
+        const result = arr1.reduce((prev, cur) => { return prev + cur }, 0)
+        console.log(result)
+    }
+
+    // 对象数组
+    function fn16() {
+        const arr1 = [{ name: '张三', age: 22 }, { name: '李四', age: 12 }]
+        const result = arr1.reduce((prev, cur) => { return prev + cur.age }, 0)
+        console.log(result)
+    }
+
+    // 9.数组合并
+    function fn17() {
+        const arr1 = [1, 2, 3, 4], arr2 = [{ name: '张三', age: 22 }, { name: '李四', age: 12 }]
+        console.log(arr1.concat(arr2))
+        console.log([...arr1, ...arr2])
+    }
+
+    // 10.数组是否包含值
+    // 普通数组
+    function fn18() {
+        const arr1 = [1, 2, 3, 4]
+        console.log(arr1.includes(1))
+        console.log(arr1.indexOf(5) > -1)
+        console.log(arr1.find(item => item === 3 ))  // 3，没有则返回undefined
+        console.log(arr1.findIndex(item => item === 3))
+    }
+
+    // 对象数组
+    function fn19() {
+        const arr1 = [{ name: '张三', age: 22 }, { name: '李四', age: 12 }]
+        const result = arr1.some(v => JSON.stringify(v) === JSON.stringify({ name: '张三', age: 32 }))
+        console.log(result)
+    }
+
+    // fn1()
+    // fn2()
+    // fn3()
+    // fn4()
+    // fn5()
+    // fn6()
+    // fn7()
+    // fn8()
+    // fn9()
+    // fn10()
+    // fn11()
+    // fn12()
+    // fn13()
+    // fn14()
+    // fn15()
+    // fn16()
+    // fn17()
+    // fn18()
+    fn19()
+    
+</script>
+</html>
