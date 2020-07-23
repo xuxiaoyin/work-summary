@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+</head>
+<body style="background: #f0f2f7">
+  <div id="main" style="width: 100%;height:500px;"></div>
+  <script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+    let singleData = []
+    const data = [
+      {
+        name: '分类1',
+        value: 5,
+        itemStyle: {
+          normal: {
+            color: '#6396d8'
+          }
+        },
+        children: [
+          { name: '测试1', value: 1, icon: 'icon01' },
+          { name: '测试2', value: 1, icon: 'icon02' },
+          { name: '测试3', value: 1, icon: 'icon03' },
+          { name: '测试4', value: 1, icon: 'icon04' },
+          { name: '测试5', value: 1, icon: 'icon05' }
+        ]
+      },
+      {
+        name: '分类2',
+        value: 2,
+        itemStyle: {
+          normal: {
+            color: '#8a76e2'
+          }
+        },
+        children: [
+          { name: '测试1', value: 1, icon: 'icon06' },
+          { name: '测试2', value: 1, icon: 'icon07' }
+        ]
+      },
+      {
+        name: '分类3',
+        value: 4,
+        itemStyle: {
+          normal: {
+            color: '#75c2ff'
+          }
+        },
+        children: [
+          { name: '测试1', value: 1, icon: 'icon08' },
+          { name: '测试2', value: 1, icon: 'icon09' },
+          { name: '测试3', value: 1, icon: 'icon10' },
+          { name: '测试4', value: 1, icon: 'icon11' }
+        ]
+      },
+      {
+        name: '分类四',
+        value: 8,
+        itemStyle: {
+          normal: {
+            color: '#6bc98d'
+          }
+        },
+        children: [
+          { name: '测试1', value: 1, icon: 'icon12' },
+          { name: '测试2', value: 1, icon: 'icon13' },
+          { name: '测试3', value: 1, icon: 'icon14' },
+          { name: '测试4', value: 1, icon: 'icon15' },
+          { name: '测试5', value: 1, icon: 'icon16' },
+          { name: '测试6', value: 1, icon: 'icon17' },
+          { name: '测试7', value: 1, icon: 'icon18' },
+          { name: '测试8', value: 1, icon: 'icon19' }
+        ]
+      },
+      {
+        name: '分类五',
+        value: 11,
+        itemStyle: {
+          normal: {
+            color: '#7db1e0'
+          }
+        },
+        children: [
+          { name: '测试1', value: 1, icon: 'icon20' },
+          { name: '测试2', value: 1, icon: 'icon21' },
+          { name: '测试3', value: 1, icon: 'icon22' },
+          { name: '测试4', value: 1, icon: 'icon23' },
+          { name: '测试5', value: 1, icon: 'icon24' },
+          { name: '测试6', value: 1, icon: 'icon25' },
+          { name: '测试7', value: 1, icon: 'icon26' },
+          { name: '测试8', value: 1, icon: 'icon27' },
+          { name: '测试9', value: 1, icon: 'icon28' },
+          { name: '测试10', value: 1, icon: 'icon29' },
+          { name: '测试11', value: 1, icon: 'icon30' }
+        ]
+      }
+    ]
+
+    // 指定图表的配置项和数据
+    function getOption() {
+      return {
+        tooltip: {},
+        formatter: function(params) {
+          if (params.data && params.data.children) {
+            return ''
+          } else {
+            return params.name
+          }
+        },
+        series: [{
+            name: '全部',
+            type: 'treemap',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: singleData.length > 0 ? 40 : 0,
+            roam: false,
+            leafDepth: 2,
+            visibleMin: 100,
+            nodeClick: 'click',
+            zoomToNodeRatio: 0.5,
+            label: {
+              show: true,
+              formatter: null
+            },
+            upperLabel: {
+              normal: {
+                show: true,
+                formatter: null
+              }
+            },
+            levels: [{
+              upperLable: { show: false },
+              itemStyle: {
+                normal: {
+                  borderColor: 'transparent',
+                  borderWidth: 8,
+                  gapWidth: 8
+                }
+              }
+            }, {
+              upperLabel: {
+                show: true,
+                color: '#303133',
+                fontSize: 16,
+                fontWeight: 'bold',
+                height: 40
+              },
+              itemStyle: {
+                normal: {
+                  borderColor: '#fff',
+                  borderWidth: 8,
+                  gapWidth: 0
+                },
+                emphasis: {
+                  shadowColor: '#014e9e',
+                  shadowOffsetX: 0,
+                  shadowOffsetY: 0,
+                  shadowBlur: singleData.length ? 0 : 8
+                }
+              },
+              emphasis: {
+                upperLabel: {
+                  color: '#014e9e'
+                }
+              }
+            }, {
+              label: {
+                color: '#fff',
+                position: 'left top',
+                fontSize: 14
+              },
+              itemStyle: {
+                normal: {
+                  borderColor: 'transparent',
+                  borderWidth: 1,
+                  gapWidth: 1
+                }
+              }
+            }],
+            breadcrumb: { // 返回按钮
+              show: singleData.length > 0
+            },
+            data: singleData.length > 0 ? singleData : data
+        }]
+      }
+    }
+
+    function draw() {
+      RemoveIcon()
+      myChart.setOption(getOption());
+
+      setTimeout(() => {
+        RemoveIcon()
+        InsertIcon()
+      }, 800)
+    }
+
+    function InsertIcon() {
+      const normalList = myChart._chartsViews[0].renderTask.context.data
+      // 名字集合
+      const nameList = normalList._nameList
+      // 位置，长宽等数据
+      const layoutList = normalList._itemLayouts
+      // 名字和位置，长宽等数据建立链接
+      const allList = []
+      nameList.forEach((item, index) => {
+        allList.push({
+          data: layoutList[index],
+          name: item
+        })
+      })
+
+      // 分类的集合
+      const level1 = allList.filter(item => {
+        return data.some(ele => ele.name === item.name)
+      })
+
+      // 分类位置的集合
+      const indexList = []
+      level1.forEach(item => {
+        const _index = allList.findIndex(opt => opt.name === item.name)
+        indexList.push(_index)
+      })
+
+      const and = []
+      level1.forEach((item, index) => {
+        const children = []
+        allList.forEach((opt, _index) => {
+          if (_index > indexList[index] && _index < indexList[index + 1]) {
+            children.push(opt)
+          } else if (!indexList[index + 1] && _index > indexList[index]) {
+            children.push(opt)
+          }
+        })
+        and.push({ level1: item, children })
+      })
+
+
+      and.forEach(item => {
+        if (item.children && item.children.length) {
+          const parentIndex = data.findIndex(opt => opt.name === item.level1.name)
+          item.children.forEach(child => {
+            let src = ''
+            data[parentIndex].children.forEach(opt => {
+              if (opt.name === child.name) {
+                src = opt.icon
+              }
+            })
+
+            let src2 = ''
+            // debugger
+            if (src) {
+              try {
+                src2 = `../icon/${src}.svg`
+              } catch (e) {
+                console.log(e)
+              }
+            }
+            
+            if (src2) {
+              var Img = new Image()
+              Img.src = src2
+              Img.style.cssText = `position: absolute; pointerEvents = none`
+              Img.style.width = and.length > 1 ? '60px' : '80px'
+              Img.style.height = and.length > 1 ? '60px' : '80px'
+              if (child.data && child.data.height > 50 && child.data.width > 50) {
+                Img.style.maxHeight = child.data.height / 1.8 + 'px'
+                Img.style.maxWidth = child.data.width / 1.8 + 'px'
+                document.getElementById('main').appendChild(Img)
+                const h = Img.offsetHeight + 5
+                const w = Img.offsetWidth + 5
+                Img.style.top = child.data.y + child.data.height + item.level1.data.y - h + 'px'
+                Img.style.left = child.data.x + child.data.width + item.level1.data.x - w + 'px'
+              }
+            }
+          })
+        }
+      })
+
+    }
+
+    function RemoveIcon() {
+      const ImgList = document.getElementById('main').querySelectorAll('img')
+      if (ImgList.length) {
+        for (let i = 0; i < ImgList.length; i++) {
+          document.getElementById('main').removeChild(ImgList[i])
+        }
+      }
+    }
+
+    draw()
+    myChart.on('click', function(params) {
+      let isSingle = false
+      singleData = []
+
+      if (params.treePathInfo.length === 1) {
+        isSingle = false
+        singleData = []
+        draw()
+      }
+
+      if (params.treePathInfo.length === 2 && !isSingle) {
+        isSingle = true
+        singleData.push(params.data)
+        draw()
+      }
+    })
+</script>
+</body>
+</html>
