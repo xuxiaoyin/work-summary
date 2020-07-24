@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+</head>
+<body>
+  <div id="chart" style="width: 100%; height: 500px"></div>
+  <div class="form">
+    <p>先点击要修改的区域</p>
+    <textarea name="" id="text" cols="30" rows="10"></textarea>
+    <button onclick="sureClick()">确定修改</button>
+  </div>
+
+  <script>
+    const dom = document.getElementById('chart')
+    const myChart = echarts.init(dom)
+    const data = [
+      { name: '2018-01-02', value: '0'},
+      { name: '2018-01-05', value: '4'},
+      { name: '2018-01-10', value: '8'},
+      { name: '2018-01-15', value: '-1'},
+      { name: '2018-01-19', value: '-6'},
+      { name: '2018-01-25', value: '-3'},
+      { name: '2018-01-31', value: '2'},
+      { name: '2018-02-02', value: '4'},
+      { name: '2018-02-05', value: '6'},
+      { name: '2018-02-10', value: '8'},
+      { name: '2018-02-15', value: '14'},
+      { name: '2018-02-20', value: '20'},
+      { name: '2018-02-25', value: '16'},
+      { name: '2018-02-28', value: '13'},
+      { name: '2018-03-02', value: '0'},
+      { name: '2018-03-05', value: '6'},
+      { name: '2018-03-10', value: '8'},
+      { name: '2018-03-15', value: '-14'},
+      { name: '2018-03-20', value: '20'},
+      { name: '2018-03-25', value: '-16'},
+      { name: '2018-03-28', value: '13'},
+      { name: '2018-04-02', value: '0'},
+      { name: '2018-04-05', value: '6'},
+      { name: '2018-04-10', value: '-8'},
+      { name: '2018-04-15', value: '14'},
+      { name: '2018-04-20', value: '-20'},
+      { name: '2018-04-25', value: '16'},
+      { name: '2018-04-28', value: '-13'}
+    ]
+    const data1 = [
+      { name: '2018-01-02', value: '2'},
+      { name: '2018-01-05', value: '3'},
+      { name: '2018-01-10', value: '5'},
+      { name: '2018-01-15', value: '1'},
+      { name: '2018-01-19', value: '-2'},
+      { name: '2018-01-25', value: '-7'},
+      { name: '2018-01-31', value: '2'},
+      { name: '2018-02-02', value: '-4'},
+      { name: '2018-02-05', value: '0'},
+      { name: '2018-02-10', value: '-8'},
+      { name: '2018-02-15', value: '4'},
+      { name: '2018-02-20', value: '16'},
+      { name: '2018-02-25', value: '3'},
+      { name: '2018-02-28', value: '-13'},
+      { name: '2018-03-02', value: '3'},
+      { name: '2018-03-05', value: '5'},
+      { name: '2018-03-10', value: '7'},
+      { name: '2018-03-15', value: '2'},
+      { name: '2018-03-20', value: '10'},
+      { name: '2018-03-25', value: '-3'},
+      { name: '2018-03-28', value: '13'},
+      { name: '2018-04-02', value: '2'},
+      { name: '2018-04-05', value: '-6'},
+      { name: '2018-04-10', value: '8'},
+      { name: '2018-04-15', value: '12'},
+      { name: '2018-04-20', value: '19'},
+      { name: '2018-04-25', value: '18'},
+      { name: '2018-04-28', value: '15'}
+    ]
+    const data2 = [
+      { name: '2018-01-02', value: '0'},
+      { name: '2018-01-05', value: '6'},
+      { name: '2018-01-10', value: '7'},
+      { name: '2018-01-15', value: '-4'},
+      { name: '2018-01-19', value: '-2'},
+      { name: '2018-01-25', value: '2'},
+      { name: '2018-01-31', value: '8'},
+      { name: '2018-02-02', value: '4'},
+      { name: '2018-02-05', value: '0'},
+      { name: '2018-02-10', value: '-7'},
+      { name: '2018-02-15', value: '-12'},
+      { name: '2018-02-20', value: '-3'},
+      { name: '2018-02-25', value: '-18'},
+      { name: '2018-02-28', value: '4'},
+      { name: '2018-03-02', value: '8'},
+      { name: '2018-03-05', value: '9'},
+      { name: '2018-03-10', value: '12'},
+      { name: '2018-03-15', value: '6'},
+      { name: '2018-03-20', value: '5'},
+      { name: '2018-03-25', value: '9'},
+      { name: '2018-03-28', value: '7'},
+      { name: '2018-04-02', value: '6'},
+      { name: '2018-04-05', value: '-2'},
+      { name: '2018-04-10', value: '-6'},
+      { name: '2018-04-15', value: '-8'},
+      { name: '2018-04-20', value: '3'},
+      { name: '2018-04-25', value: '7'},
+      { name: '2018-04-28', value: '11'}
+    ]
+    let markData = [
+      { dateRange: '2018-01-02~2018-01-19', mark: '第一次调仓' },
+      { dateRange: '2018-02-05~2018-03-02', mark: '第二次调仓' },
+      { dateRange: '2018-04-10~2018-04-25', mark: '第一次调仓' },
+    ]
+
+    let textareaVal = ''
+    let currentData = {}
+
+    draw()
+
+    myChart.on('click', params => {
+      currentData = params
+      document.getElementById('text').value = params.name.replace(/[\r\n]/g, '')
+    })
+
+    function sureClick() {
+      const inp = document.getElementById('text')
+      if (inp.value && currentData.name) {
+        const _index = markData.findIndex(item => item.mark === currentData.name.replace(/[\r\n]/g, '') && item.dateRange.split('~')[0] === currentData.data.xAxis)
+        if (_index > -1) {
+          markData[_index].mark = inp.value
+          draw()
+          inp.value = ''
+          currentData = {}
+        }
+      }
+      console.log(inp.value)
+    }
+
+    function draw() {
+      myChart.clear()
+      myChart.setOption(getOption())
+    }
+
+    function getMarkAreaData() {
+      const data = []
+      const len = data2.length
+      const baseWidth = ~~(dom.offsetWidth / 16 )
+      markData.forEach((item, index) => {
+        const xAxisArr = item.dateRange.split('~')
+        const index1 = data2.findIndex(date => date.name === xAxisArr[0])
+        const index2 = data2.findIndex(date => date.name === xAxisArr[1])
+        const scale = (index2 - index1) / len
+        const colorArr = ['#0aaf50', '#e55111', '#12b6e0']
+        const dataArr = [
+          {
+            xAxis: xAxisArr[0],
+            name: item.mark ? formatter(item.mark, Math.round(scale * baseWidth)) : '',
+            label: {
+              formatter: '{b|{b}}',
+              rich: {
+                b: {
+                  lineHeight: 20,
+                  color: colorArr[index % colorArr.length]
+                }
+              }
+            },
+            emphasis: {
+              itemStyle: {
+                color: 'rgb(213, 249, 252)',
+                position: 'insideTop'
+              }
+            }
+          },
+          { xAxis: xAxisArr[1] }
+        ]
+        data.push(dataArr)
+      })
+      return data
+    }
+
+    function getOption() {
+      const opt = {
+        title: {
+          text: 'TEST',
+          left: 'center',
+          align: 'right'
+        },
+        grid: {
+          bottom: 30,
+          top: 40
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross'
+          }
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        legend: {
+          data: ['数据一', '数据二', '数据三'],
+          left: 'center',
+          bottom: 0
+        },
+        xAxis: {
+          offset: -(dom.offsetHeight / 2 - 40),
+          z: 99,
+          type: 'category',
+          boundaryGap: false,
+          data: data.map(item => item.name)
+        },
+        yAxis: [
+          {
+            type: 'value',
+            axisLabel: {
+              formatter: '{value}%'
+            },
+            min: -30,
+            max: 30,
+            splitLine: { // 网格线
+              show: false
+            },
+            axisTick: { // y轴刻度线
+              show: false
+            },
+            axisLine: { // y轴
+              show: false
+            },
+            axisPointer: {
+              snap: true
+            }
+          },
+          {
+            type: 'value',
+            axisLabel: {
+              formatter: '{value}%'
+            },
+            min: -20,
+            max: 20,
+            splitLine: { // 网格线
+              show: false
+            },
+            axisTick: { // y轴刻度线
+              show: false
+            },
+            axisLine: { // y轴
+              show: false
+            },
+            axisPointer: {
+              snap: true
+            }
+          }
+        ],
+        series: [
+          {
+            name: '数据一',
+            type: 'line',
+            symbol: 'none',
+            areaStyle: {},
+            itemStyle: {
+              normal: {
+                color: '#a5a5a5'
+              }
+            },
+            data: data
+          }, {
+            name: '数据二',
+            type: 'line',
+            symbol: 'none',
+            itemStyle: {
+              normal: {
+                color: '#ff0000'
+              }
+            },
+            data: data1
+          }, {
+            name: '数据三',
+            type: 'line',
+            symbol: 'none',
+            yAxisIndex: 1,
+            itemStyle: {
+              normal: {
+                color: '#1d4d78'
+              }
+            },
+            data: data2,
+            markArea: {
+              itemStyle: {
+                color: 'rgb(235, 249, 252)'
+              },
+              label: {
+                show: true,
+                position: 'insideTop',
+                color: '#c04013',
+                fontSize: 14
+              },
+              emphasis: {
+                itemStyle: {
+                  color: 'rgb(213, 249, 252)'
+                },
+                label: {
+                  position: 'insideTop'
+                }
+              },
+              data: getMarkAreaData()
+            }
+          }
+        ]
+      }
+
+      return opt
+    }
+
+    // 设置换行
+    function formatter(val, num) {
+      const strs = val.split('')
+      let str = ''
+      for (let i=0, s; s = strs[i++];) {
+        str += s
+        if (!(i % num)) {
+          str += '\n'
+        }
+      }
+      return str
+    }
+  
+  </script>
+</body>
+</html>
