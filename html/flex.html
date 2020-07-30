@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>flex布局</title>
+</head>
+<body>
+  <div class="add">
+    <div class="son">123</div>
+    <div class="son son1">456</div>
+    <div class="son son2">son2</div>
+  </div>
+</body>
+
+<style>
+html, body {
+  margin: 0;
+} 
+.add {
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  background: #ccc;
+}
+.son {
+  flex: 1;
+  margin: 0 10px;
+  background: red;
+  line-height: 30px;
+}
+.son1 {
+  flex: 2;
+  background: blue;
+  line-height: 50px;
+}
+.son2 {
+  flex: 3;
+  background: green;
+}
+</style>
+</html>

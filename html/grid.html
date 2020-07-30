@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div>flex布局是一维布局，Grid布局是二维布局</div>
+  <h1>dome1</h1>
+  <div class="wrapper">
+    <div class="one item">One</div>
+    <div class="two item">Two</div>
+    <div class="three item">Three</div>
+    <div class="four item">Four</div>
+    <div class="five item">Five</div>
+    <div class="six item">Six</div>
+  </div>
+
+  <h1>dome2</h1>
+  <div class="wrapper1">
+    <div class="one item">One</div>
+    <div class="two item">Two</div>
+    <div class="three item">Three</div>
+    <div class="four item">Four</div>
+    <div class="five item">Five</div>
+    <div class="six item">Six</div>
+  </div>
+
+  <h1>dome3：auto-fill 关键字， 让一行（或者一列）中尽可能的容纳更多的单元格</h1>
+  <div class="wrapper2">
+    <div class="one item">One</div>
+    <div class="two item">Two</div>
+    <div class="three item">Three</div>
+    <div class="four item">Four</div>
+    <div class="five item">Five</div>
+    <div class="six item">Six</div>
+  </div>
+
+  <h1>demo4: fr关键字</h1>
+  <div class="wrapper3">
+    <div class="one item">One</div>
+    <div class="two item">Two</div>
+    <div class="three item">Three</div>
+    <div class="four item">Four</div>
+    <div class="five item">Five</div>
+    <div class="six item">Six</div>
+  </div>
+
+  <h1>demo5: minmax()函数：它接受两个参数，分别为最小值和最大值。grid-template-columns: 1fr 1fr minmax(300px, 2fr) 的意思是，第三个列宽最少也是要 300px，但是最大不能大于第一第二列宽的两倍。</h1>
+  <div class="wrapper4">
+    <div class="one item">One</div>
+    <div class="two item">Two</div>
+    <div class="three item">Three</div>
+    <div class="four item">Four</div>
+    <div class="five item">Five</div>
+    <div class="six item">Six</div>
+  </div>
+
+  <h1>demo6: grid-template-areas 属性</h1>
+  <div class="wrapper5">
+    <div class="one item header">Header</div>
+    <div class="two item sidebar">Sidebar</div>
+    <div class="three item content">Content</div>
+  </div>
+
+  <h1>demo7: grid-column-start 属性：左边框所在的垂直网格线; grid-column-end 属性：右边框所在的垂直网格线;grid-row-start 属性：上边框所在的水平网格线;grid-row-end 属性：下边框所在的水平网格线</h1>
+  <div class="wrapper6">
+    <div class="one item box1">One</div>
+    <div class="two item box2">Two</div>
+    <div class="three item box3">Three</div>
+    <div class="four item box4">Four</div>
+    <div class="five item box5">Five</div>
+    <div class="six item box6">Six</div>
+  </div>
+</body>
+
+<style>
+.wrapper {
+  margin: 60px;
+  /* 设置属性： grid、inline-grid */
+  display: grid;
+  /* 设置列宽
+    repeat()函数：可以简化重复的值， 该函数接受两个参数，第一个参数是重复的次数，第二个参数是所要重复的值
+   */
+  grid-template-columns: repeat(3, 200px);
+  grid-gap: 20px;
+  /* 设置行高 */
+  grid-template-rows: 100px 200px
+}
+.one {
+  background: #19CAAD;
+}
+.two { 
+  background: #8CC7B5;
+}
+.three {
+  background: #D1BA74;
+}
+.four {
+  background: #BEE7E9;
+}
+.five {
+  background: #E6CEAC;
+}
+.six {
+  background: #ECAD9E;
+}
+.item {
+  text-align: center;
+  font-size: 200%;
+  color: #fff;
+}
+.wrapper1 {
+  display: grid;
+  grid-template-columns: 200px 200px 200px;
+  grid-gap: 5px;
+  grid-template-rows: 50px 50px;
+}
+.wrapper2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 200px);
+  grid-gap: 5px;
+  grid-auto-rows: 50px;
+}
+.wrapper3 {
+  display: grid;
+  grid-template-columns: 200px 1fr 2fr;
+  grid-gap: 5px;
+  grid-auto-rows: 50px;
+}
+.wrapper4 {
+  display: grid;
+  grid-template-columns: 1fr 1fr minmax(300px, 2fr);
+  grid-gap: 5px;
+  grid-auto-rows: 50px;
+}
+.wrapper5 {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: 120px auto 120px;
+  grid-template-areas: 
+    /* ". header header" */
+    "sidebar header header"
+    "sidebar content content";
+}
+.header {
+  grid-area: header;
+}
+.sidebar {
+  grid-area: sidebar;
+}
+.content {
+  grid-area: content;
+}
+.wrapper6 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+  grid-auto-rows: minmax(100px, auto)
+}
+.box1 {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+.box2 {
+  grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  z-index: 1;
+}
+.box3 {
+  grid-column-start: 3;
+  grid-column-end: 4;
+  grid-row-start: 1;
+  grid-row-end: 4;
+}
+.box4 {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 5;
+}
+.box5 {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 5;
+}
+</style>
+</html>
